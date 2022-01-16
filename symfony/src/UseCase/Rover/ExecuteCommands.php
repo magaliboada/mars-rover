@@ -10,9 +10,12 @@ class ExecuteCommands implements UseCaseInterface
 {
     public const NO_ROVER_FOUND = 'No rover found';
     public const NO_PLANET_FOUND = 'No planet found';
-    const INVALID_COMMAND = 'Invalid command';
-    const ROVER_OUT_OF_BOUNDS = 'Rover is out of bounds';
-    const ROVER_ENCOUNTERED_OBSTACLE = 'Rover encountered an obstacle';
+    public const INVALID_COMMAND = 'Invalid command found';
+    public const ROVER_OUT_OF_BOUNDS = 'Rover sent out of bounds';
+    public const ROVER_ENCOUNTERED_OBSTACLE = 'Rover encountered an obstacle';
+    public const ROVER_MOVED_SUCCESSFULLY = 'Rover moved successfully';
+    const ROVER_STOOD_IN_PLACE = 'Rover stood in place';
+
 
     /**
      * @param UseCaseRequestInterface|ExecuteCommandsRequest $request
@@ -40,14 +43,15 @@ class ExecuteCommands implements UseCaseInterface
 
         if($request->getCommands() === '') {
             $response->setRoverPosition($request->getRover()->getPosition());
+            $response->setMessage(self::ROVER_STOOD_IN_PLACE);
             $response->setStatus(UseCaseResponseInterface::HTTP_OK);
             return $response;
         }
 
         $commands = str_split($request->getCommands());
         foreach ($commands as $command) {
-            //Save checkpoint in case of collision or out of bounds
-            $checkPoint = clone($rover->getPosition());
+            //Save checkpoint in case of collision, out of bounds or invalid command
+            $response->setRoverPosition(clone($rover->getPosition()));
             switch ($command) {
                 case 'L':
                     $rover->turnLeft();
@@ -65,18 +69,17 @@ class ExecuteCommands implements UseCaseInterface
 
             if(!$planet->isInBounds($rover->getPosition())) {
                 $response->setMessage(self::ROVER_OUT_OF_BOUNDS);
-                $response->setRoverPosition($checkPoint);
                 return $response;
             }
 
             if($planet->isObstacle($rover->getPosition())) {
                 $response->setMessage(self::ROVER_ENCOUNTERED_OBSTACLE);
                 $response->setCollisionDetected(true);
-                $response->setRoverPosition($checkPoint);
                 return $response;
             }
         }
 
+        $response->setMessage(self::ROVER_MOVED_SUCCESSFULLY);
         $response->setStatus(UseCaseResponseInterface::HTTP_OK);
         $response->setRoverPosition($rover->getPosition());
         return $response;

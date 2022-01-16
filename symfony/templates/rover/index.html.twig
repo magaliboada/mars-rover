@@ -1,60 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task index{% endblock %}
+{% block title %}Command Executer{% endblock %}
 
 {% block body %}
-<script src="{{ asset('js/easytimer.min.js') }}"></script>
-<script src="{{ asset('js/roverHandler.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="{{ asset('js/roverHandler.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 
-    <div class="container main-content">
-    <h1>Tasks</h1>
- 
-    <table class="table task-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Time</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for task in tasks %}    
-            <tr>
-                <td class = "name">{{ task.Name }}</td>
-                <td seconds = "{{ task.seconds }}">{{ task.formattedTime }}</td>
-            </tr>
-                
-        {% else %}
-
-            <tr class="no-result">
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        
-    </table>
-
-    <div class="total">
-        <label for="total">Total</label>
-        <div class="total-value">00:00:00</div>
-    </div>
-
-    <div class="row new-task">
-        <div class="task-name col-sm-8">
-            <input type="text" name="task-name" id="task-name">
-            <span class="required-message"></span>
-        </div>
-        <div id="timer" class="col-sm-4">
-            <div class="buttons">                
-                <button class="startButton btn start">Start</button>
-                <button class='stopButton btn end' style="display: none;">Stop</button>
+    <div class="container main-content mt-5">
+        <h1 class="text-4xl">Command Executer</h1>
+        <div class="grid gap-4">
+            {{ form_start(form, { 'attr' : { 'class': 'grid gap-5' } }) }}
+            <div>
+                <label class="text-3xl mb-2">Rover</label>
+                <div class="rover border p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="col-span-1">
+                        <label for="position" class="text-xl mb-2">Starting direction</label>
+                        {{ form_row(form.roverDirection) }}
+                    </div>
+                    <div class="col-span-1">
+                        <label for="position" class="text-xl mb-2">Starting position</label>
+                        <div class="position border w-auto p-4 grid gap-3 rounded">
+                            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row justify-between">
+                                <label for="" class="mb-2">Latitude (X)</label>
+                                {{ form_row(form.roverPosition.x) }}
+                            </div>
+                            <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row justify-between">
+                                <label for="" class="mb-2">Longitude (Y)</label>
+                                {{ form_row(form.roverPosition.y) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="values">00:00:00</div>            
+            <div>
+                <label class="text-3xl mb-2">Planet</label>
+                <div class="rover border p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="flex col-span-1 flex flex-col lg:flex-row justify-between">
+                        <label for="position" class="text-xl mb-2">Size</label>
+                        {{ form_row(form.planetSize) }}
+                    </div>
+                    <div class="flex col-span-1 flex flex-col lg:flex-row justify-between">
+                        <label for="position" class="text-xl mb-2">Obstacles</label>
+                        {{ form_row(form.planetObstacles) }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="text-3xl mb-2">Commands</label>
+                <div class="border rounded p-4 grid grid-cols-12 gap-5">
+                    <div class="col-span-12 sm:col-span-8 flex">
+                        {{ form_row(form.commands) }}
+                    </div>
+                    <div class="col-span-12 sm:col-span-4">
+                        <button class="startButton w-full rounded p-2 text-lg">
+                            Start
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="result-block flex justify-center rounded p-5 h-6 text-xl mt-4">
+                <div id="result" class="flex items-center font-medium">AWAITING INSTRUCTIONS . . .</div>
+                <img class="h-10 hidden collision" src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/48686/collision-emoji-clipart-md.png" alt="">
+            </div>
+            {{ form_end(form) }}
         </div>
-
     </div>
-
-    </div>
-
 {% endblock %}
