@@ -53,8 +53,8 @@ class ScenarioType extends AbstractType
                     'class' => 'w-full flex items-end flex-col',
                 ],
                 'required' => false,
-                'help' => 'The commands are the instructions to the rover. The rover will execute the commands in the order they are given.',
-
+                'help' => 'The commands are the instructions to the rover. The rover will execute the commands in 
+                the order they are given. F: Moves forward R: Turns right L: Turns left',
             ]);
     }
 }

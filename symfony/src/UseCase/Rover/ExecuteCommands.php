@@ -55,7 +55,7 @@ class ExecuteCommands implements UseCaseInterface
             return $response;
         }
 
-        $commands = str_split($request->getCommands());
+        $commands = str_split(strtoupper($request->getCommands()));
         foreach ($commands as $command) {
             //Save checkpoint in case of collision, out of bounds or invalid command
             $response->setRoverPosition(clone($rover->getPosition()));
