@@ -52,7 +52,7 @@ class Planet
 
     public function isObstacle(Coordinate $coordinate): bool
     {
-        return in_array($coordinate, $this->obstacles, true);
+        return in_array($coordinate, $this->obstacles);
     }
 
     public function isInBounds(Coordinate $coordinate): bool
