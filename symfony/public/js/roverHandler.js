@@ -39,6 +39,8 @@ $(document).ready(function () {
                     $(".startButton").prop("disabled", false);
                 }
             });
+        } else {
+            $(".startButton").prop("disabled", false);
         }
     });
 });

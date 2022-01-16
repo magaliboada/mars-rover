@@ -46,6 +46,21 @@ class ExecuteCommandsTest extends TestCase
         self::assertEquals(new Coordinate(1, 2), $response->getRoverPosition());
     }
 
+    public function testInvalidStartingPoint(): void
+    {
+        $request = new ExecuteCommandsRequest();
+        $request->setRover(new Rover(new Coordinate(5, 5), 'N'));
+        $request->setPlanet(new Planet(3));
+        $request->setCommands('FRFLFF');
+
+        /** @var ExecuteCommandsResponse $response */
+        $response = $this->executeCommands->execute($request);
+
+        self::assertFalse($response->isOk());
+        self::assertEquals(ExecuteCommands::ROVER_STARTED_OUT_OF_BOUNDS, $response->getMessage());
+        self::assertEquals(new Coordinate(0, 0), $response->getRoverPosition());
+    }
+
     public function testInvalidCommand(): void
     {
         $request = new ExecuteCommandsRequest();

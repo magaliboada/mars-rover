@@ -2,6 +2,7 @@
 
 namespace App\UseCase\Rover;
 
+use App\Model\Coordinate;
 use App\Model\UseCase\UseCaseInterface;
 use App\Model\UseCase\UseCaseRequestInterface;
 use App\Model\UseCase\UseCaseResponseInterface;
@@ -14,8 +15,8 @@ class ExecuteCommands implements UseCaseInterface
     public const ROVER_OUT_OF_BOUNDS = 'Rover sent out of bounds';
     public const ROVER_ENCOUNTERED_OBSTACLE = 'Rover encountered an obstacle';
     public const ROVER_MOVED_SUCCESSFULLY = 'Rover moved successfully';
-    const ROVER_STOOD_IN_PLACE = 'Rover stood in place';
-
+    public const ROVER_STOOD_IN_PLACE = 'Rover stood in place';
+    public const ROVER_STARTED_OUT_OF_BOUNDS = 'Rover started out of bounds';
 
     /**
      * @param UseCaseRequestInterface|ExecuteCommandsRequest $request
@@ -38,6 +39,12 @@ class ExecuteCommands implements UseCaseInterface
 
         if($rover === null) {
             $response->setMessage(self::NO_ROVER_FOUND);
+            return $response;
+        }
+
+        if(!$planet->isInBounds($rover->getPosition())) {
+            $response->setMessage(self::ROVER_STARTED_OUT_OF_BOUNDS);
+            $response->setRoverPosition(new Coordinate(0, 0));
             return $response;
         }
 
