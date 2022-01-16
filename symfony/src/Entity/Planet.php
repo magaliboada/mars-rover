@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Model\Coordinate;
+use Exception;
 
 class Planet
 {
     private $size;
     private $obstacles;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(int $size, int $obstaclesAmount = 0)
     {
         $this->size = $size;
@@ -35,6 +39,9 @@ class Planet
         $this->obstacles = $obstacles;
     }
 
+    /**
+     * @throws Exception
+     */
     private function generateObstacles(int $amount): void
     {
         $this->obstacles = [];
@@ -45,11 +52,12 @@ class Planet
 
     public function isObstacle(Coordinate $coordinate): bool
     {
-        return in_array($coordinate, $this->obstacles);
+        return in_array($coordinate, $this->obstacles, true);
     }
 
     public function isInBounds(Coordinate $coordinate): bool
     {
-        return $coordinate->getX() >= 0 && $coordinate->getX() < $this->size && $coordinate->getY() >= 0 && $coordinate->getY() < $this->size;
+        return $coordinate->getX() >= 0 && $coordinate->getX() < $this->size
+            && $coordinate->getY() >= 0 && $coordinate->getY() < $this->size;
     }
 }

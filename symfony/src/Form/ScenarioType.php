@@ -28,7 +28,7 @@ class ScenarioType extends AbstractType
                 'required' => true,
                 'help' => 'The direction of the rover.',
             ])
-            ->add('roverPosition', CoordinateForm::class, [
+            ->add('roverPosition', CoordinateType::class, [
                 'label' => false,
                 'required' => true,
             ])
