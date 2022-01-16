@@ -2,6 +2,8 @@ $(document).ready(function () {
     $(".startButton").click(function (event) {
         $('.collision').hide();
         event.preventDefault();
+        $(".startButton").prop("disabled", true);
+
         if ($("form").valid()) {
             $.ajax({
                 url: '/execute',
@@ -25,7 +27,7 @@ $(document).ready(function () {
                         $('.result-block').css("background", "#8cbf8c");
                     } else {
                         $('.result-block').css("background", "#ff0018cf");
-                        if(data.collided) {
+                        if (data.collided) {
                             $('.collision').show();
                         }
                     }
@@ -34,6 +36,7 @@ $(document).ready(function () {
                         '<br>' +
                         'Final position: (' + data.roverPosition + ')'
                     );
+                    $(".startButton").prop("disabled", false);
                 }
             });
         }

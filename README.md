@@ -27,3 +27,5 @@ Tests can be found inside the following files:
 - Composer
 - Docker
 - Symfony 5.1
+- TailwindCSS
+- Twig
